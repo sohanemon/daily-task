@@ -8,11 +8,12 @@ const $ = (id) => {
 };
 /* --------------------------------------------------------------------- */
 /* --------------------- create and add an element --------------------- */
-const create = (type, parent, id, text, tailwind) => {
+const create = (type, parent, id, text, tailwind, cl) => {
   const element = document.createElement(type);
   element.innerText = text;
   element.setAttribute("id", id);
   element.classList = tailwind;
+  element.classList.add(cl);
   $(parent).appendChild(element);
 };
 
@@ -20,6 +21,7 @@ const create = (type, parent, id, text, tailwind) => {
 /*                         Beginning the tasklist                        */
 /* --------------------------------------------------------------------- */
 
+$("root").classList = "w-2/3 mx-auto container";
 create(
   "h1",
   "root",
@@ -28,11 +30,18 @@ create(
   "text-center font-semibold text-3xl m-10 border-b-2 border-black"
 );
 create(
+  "h3",
+  "root",
+  null,
+  "Without any markup. 🔥 JavaScript Only 🚀",
+  "text-2xl text-center"
+);
+create(
   "input",
   "root",
   "inputField",
   "",
-  "border-black border-2 text-center rounded-xl h-16 w-2/3 block mx-auto"
+  "border-black border-2 text-xl border-green-200 focus:outline-green-400 text-center rounded-xl h-16 w-2/3 block mx-auto"
 );
 create(
   "button",
@@ -55,24 +64,34 @@ $("addTask").addEventListener("click", () => {
     "taskContainer",
     "id" + taskId,
     null,
-    "text-3xl flex justify-between my-1"
+    "text-3xl flex justify-between my-1",
+    "listItem"
   );
-  create("span", "id" + taskId, null, value, null);
+  create("span", "id" + taskId, "task" + taskId, value, null);
   create("span", "id" + taskId, "icons" + taskId, null, "space-x-10");
   create(
     "i",
     "icons" + taskId,
-    null,
+    "del" + taskId,
     null,
     "fa-solid fa-circle-minus cursor-pointer transition-all text-red-600 p-7 hover:animate-bounce "
   );
+
+  $("del" + taskId).addEventListener("click", (e) => {
+    e.target.parentNode.parentNode.parentNode.removeChild(
+      e.target.parentNode.parentNode
+    );
+  });
   create(
     "i",
     "icons" + taskId,
-    null,
+    "done" + taskId,
     null,
     "fa-solid fa-circle-check cursor-pointer transition-all text-green-600  p-7 hover:animate-bounce "
   );
-
+  $("done" + taskId).addEventListener("click", (e) => {
+    e.target.parentNode.parentNode.classList.add("line-through");
+    e.target.parentNode.parentNode.classList.add("decoration-2");
+  });
   taskId++;
 });
